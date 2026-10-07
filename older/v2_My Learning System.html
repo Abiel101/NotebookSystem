@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3efe6">
+<meta name="description" content="A personal learning system for school, cybersecurity, practice, archiving, and building a connected mind map of understanding.">
+<title>My Learning System</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   MY LEARNING SYSTEM — redesign (same wording, new look)
+   Retro mission-control paper / seasonal / light + dark
+   ========================================================= */
+:root{
+  --bg:#f3efe6;--surface:#fffdf8;--surface-2:#f8f4eb;--text:#24282d;--muted:#5f676e;
+  --line:#ddd7ca;--line-strong:#c9c1b3;--accent:#506a82;--accent-dark:#385063;
+  --secondary:#6f8063;--gold:#a77b3e;--red:#b85c4d;--book:#536f82;--book-dark:#354c5a;
+  --tab:#d9d1c2;--tab-text:#3f474d;--tab-active:#fffdf8;--ink:#24282d;
+  --shadow:0 18px 40px rgba(55,45,30,.12);--shadow-small:0 4px 14px rgba(55,45,30,.07);
+  --character-suit:#f4f1e8;--character-dark:#28343c;--character-glass:#8aa6b7;
+  --character-red:#b85c4d;--character-gold:#d5a04c;
+  --serif:"Space Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+body.winter{--bg:#dcebfa;--surface:#f7fbff;--surface-2:#e6f1fc;--line:#b3cfea;--line-strong:#86addb;--accent:#1d5fb0;--accent-dark:#123f78;--secondary:#2f86a8;--gold:#6f8fc0;--red:#3b6fd1;--book:#2b6cb0;--book-dark:#173f6e;--tab:#bcd6f0}
+body.spring{--bg:#e4f5db;--surface:#fbfff8;--surface-2:#e8f6df;--line:#b5dba3;--line-strong:#82bf68;--accent:#23853f;--accent-dark:#14592a;--secondary:#7cb518;--gold:#d9a000;--red:#d6458a;--book:#34914f;--book-dark:#1c5a30;--tab:#c9e8b8}
+body.summer{--bg:#fff0bf;--surface:#fffaf0;--surface-2:#ffecb8;--line:#f0d078;--line-strong:#e0aa30;--accent:#c25f00;--accent-dark:#8a3f00;--secondary:#0f9aa6;--gold:#e89c00;--red:#e5432d;--book:#d17a0a;--book-dark:#8a4a05;--tab:#fbdc8c}
+body.fall{--bg:#efd6bd;--surface:#fff6ec;--surface-2:#f4dcc4;--line:#dbb08c;--line-strong:#c0805a;--accent:#8a2c18;--accent-dark:#5c1a0e;--secondary:#8b6b12;--gold:#c4721a;--red:#c0302a;--book:#8e3a22;--book-dark:#552012;--tab:#e8c4a0}
+body.dark{--bg:#11171b;--surface:#192229;--surface-2:#202b32;--text:#edf2f3;--muted:#a8b2b8;--line:#344048;--line-strong:#46535c;--accent:#91b3ca;--accent-dark:#b3ccdc;--secondary:#9ab28e;--gold:#d8aa63;--red:#d9806f;--book:#526e82;--book-dark:#334955;--tab:#2a373f;--tab-text:#dce4e8;--tab-active:#202b32;--ink:#edf2f3;--shadow:0 18px 45px rgba(0,0,0,.4);--shadow-small:0 6px 18px rgba(0,0,0,.28);--character-suit:#dfe5e4;--character-dark:#1b252b;--character-glass:#6d94aa}
+
+body.dark.winter{--bg:#07121e;--surface:#0e2136;--surface-2:#143049;--line:#25497a;--line-strong:#3a6aa8;--accent:#6db5ff;--accent-dark:#a8d2ff;--secondary:#5cc6e6;--gold:#9bb8f0;--red:#86a8ff;--book:#2a5e9a;--book-dark:#143658;--tab:#1c3c60;--tab-active:#143049}
+body.dark.spring{--bg:#08170a;--surface:#10261a;--surface-2:#173522;--line:#2b5e3a;--line-strong:#3f8a55;--accent:#62e082;--accent-dark:#a2f0b6;--secondary:#b6e85a;--gold:#ffd24a;--red:#ff8cc2;--book:#2e7d46;--book-dark:#174a28;--tab:#1d4a2c;--tab-active:#173522}
+body.dark.summer{--bg:#1b1203;--surface:#2a1d07;--surface-2:#382809;--line:#63470f;--line-strong:#94691a;--accent:#ffb02e;--accent-dark:#ffd37a;--secondary:#3fd3c9;--gold:#ffd84d;--red:#ff7852;--book:#a9690a;--book-dark:#684005;--tab:#4a3410;--tab-active:#382809}
+body.dark.fall{--bg:#190907;--surface:#2a1410;--surface-2:#381b15;--line:#64301f;--line-strong:#97492f;--accent:#ff875a;--accent-dark:#ffb899;--secondary:#e0aa3c;--gold:#eba03a;--red:#ff5a4a;--book:#8c3b24;--book-dark:#561f10;--tab:#4d2418;--tab-active:#381b15}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;background:var(--bg);scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  background-image:radial-gradient(color-mix(in srgb,var(--line-strong) 55%,transparent) 1px,transparent 1.4px);
+  background-size:22px 22px;
+  font-family:var(--serif);
+  font-size:16px;line-height:1.65;transition:background-color .25s,color .25s;
+}
+button{font:inherit}
+button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.page{width:100%;max-width:1000px;margin:auto;padding:0 18px 90px}
+.muted{color:var(--muted)}
+p{margin:8px 0}
+
+/* ---------- Hero ---------- */
+header{position:relative;padding:210px 0 52px}
+header::before{ /* planet */
+  content:"";position:absolute;right:-70px;top:6px;width:230px;height:230px;border-radius:50%;
+  background:radial-gradient(circle at 32% 28%,color-mix(in srgb,var(--gold) 55%,var(--surface)),color-mix(in srgb,var(--accent) 35%,var(--surface)) 70%);
+  box-shadow:0 0 0 16px color-mix(in srgb,var(--accent) 9%,transparent),0 0 0 34px color-mix(in srgb,var(--accent) 5%,transparent);
+  opacity:.75;pointer-events:none
+}
+header::after{ /* stars */
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.8;
+  background:
+   radial-gradient(circle at 6% 10%,var(--gold) 0 2px,transparent 2.6px),
+   radial-gradient(circle at 44% 5%,var(--accent) 0 1.6px,transparent 2.2px),
+   radial-gradient(circle at 58% 24%,var(--gold) 0 1.5px,transparent 2px),
+   radial-gradient(circle at 30% 18%,var(--accent) 0 1.4px,transparent 2px),
+   radial-gradient(circle at 96% 60%,var(--gold) 0 2px,transparent 2.6px),
+   radial-gradient(circle at 3% 70%,var(--accent) 0 1.5px,transparent 2px)
+}
+.hero-copy{position:relative;z-index:2;max-width:640px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;color:var(--accent);font:800 .68rem var(--mono);
+  letter-spacing:.16em;text-transform:uppercase;margin-bottom:24px;
+  padding:6px 12px;border:1.5px solid var(--accent);border-radius:999px;background:var(--surface)
+}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--red)}
+h1{
+  margin:0;font-family:var(--serif);font-weight:700;
+  font-size:clamp(2.6rem,12.5vw,5rem);line-height:1.04;letter-spacing:-.03em;word-spacing:.08em;text-wrap:balance
+}
+.intro{max-width:600px;margin:28px 0 0;color:var(--muted);font-size:1.05rem}
+.motto{
+  max-width:600px;margin-top:32px;padding:18px 20px;background:var(--surface);
+  border:1.5px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--gold);position:relative
+}
+.motto strong{display:block;margin-bottom:6px;line-height:1.3;font-family:var(--serif);font-size:1.12rem}
+
+/* ---------- Retro space engineer ---------- */
+.astronaut{
+  position:absolute;right:6px;top:18px;width:150px;height:195px;z-index:3;pointer-events:none;
+  filter:drop-shadow(0 12px 8px rgba(0,0,0,.14));animation:floaty 5s ease-in-out infinite
+}
+.astronaut svg{width:100%;height:100%;display:block;overflow:visible}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(2deg)}50%{transform:translateY(-8px) rotate(-2deg)}}
+.astronaut-label{
+  position:absolute;left:50%;bottom:-14px;transform:translateX(-50%) rotate(-2deg);white-space:nowrap;
+  background:var(--ink);color:var(--bg);font:800 .56rem var(--mono);letter-spacing:.12em;text-transform:uppercase;
+  padding:5px 10px;border-radius:6px;box-shadow:3px 3px 0 var(--gold)
+}
+@media(prefers-reduced-motion:reduce){.astronaut{animation:none}html{scroll-behavior:auto}}
+@media(min-width:700px){
+  header{padding:80px 0 70px}
+  header::before{right:20px;top:40px;width:300px;height:300px}
+  .astronaut{width:230px;height:299px;right:30px;top:56px}
+  .astronaut-label{font-size:.64rem;bottom:-18px}
+}
+
+/* ---------- Controls + nav ---------- */
+.controls{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin:0 0 10px;flex-wrap:wrap}
+.season-name{margin-right:auto;color:var(--accent);font:800 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.control{
+  border:1.5px solid var(--ink);background:var(--surface);color:var(--text);border-radius:999px;
+  padding:7px 13px;font-size:.74rem;font-weight:700;cursor:pointer;box-shadow:2px 2px 0 var(--line-strong);transition:.15s
+}
+.control:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--gold)}
+.control:active{transform:translate(1px,1px);box-shadow:0 0 0 var(--gold)}
+.nav-wrap{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:30;margin:0 -18px;padding:9px 18px;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);border-bottom:1.5px solid var(--ink);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
+}
+.nav{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{
+  flex:0 0 auto;text-decoration:none;color:var(--text);background:var(--surface);
+  border:1.5px solid var(--line-strong);border-radius:999px;padding:6px 13px;font-size:.76rem;font-weight:700;white-space:nowrap;transition:.15s
+}
+.nav a:hover{color:var(--surface);background:var(--accent);border-color:var(--accent)}
+
+/* ---------- Sections ---------- */
+section{margin-top:92px;scroll-margin-top:72px}
+.section-label{
+  display:flex;align-items:center;gap:12px;color:var(--accent);font:800 .7rem var(--mono);
+  letter-spacing:.15em;text-transform:uppercase;margin-bottom:18px
+}
+.section-label::after{content:"";flex:1;height:0;border-top:1.5px dashed var(--line-strong)}
+h2{margin:0 0 24px;font-family:var(--serif);font-weight:700;font-size:clamp(1.9rem,8.5vw,2.9rem);line-height:1.12;letter-spacing:-.022em;text-wrap:balance}
+h2+p{margin-top:0;margin-bottom:6px}
+h3{margin:10px 0 12px;font-family:var(--serif);font-size:1.2rem;line-height:1.28;letter-spacing:-.01em}
+.card{
+  background:var(--surface);border:1.5px solid var(--ink);border-radius:20px;padding:22px;margin-bottom:20px;
+  box-shadow:5px 5px 0 var(--line-strong)
+}
+.card-label{color:var(--red);font:800 .66rem var(--mono);letter-spacing:.13em;text-transform:uppercase}
+
+/* ---------- Overview ---------- */
+.system-item{display:grid;grid-template-columns:46px 1fr;gap:15px;padding:18px 0;border-bottom:1.5px dashed var(--line)}
+.system-item:first-child{padding-top:0}.system-item:last-child{border-bottom:0;padding-bottom:0}
+.number{
+  width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:var(--accent);
+  color:var(--surface);font:800 .86rem var(--mono);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 16%,transparent)
+}
+.system-item strong{display:block;font-family:var(--serif);font-size:1.08rem;line-height:1.3;margin-bottom:2px}
+.system-item span{display:block;color:var(--muted);font-size:.9rem;margin-top:3px}
+
+/* ---------- Notebook ---------- */
+.book-wrap{margin:30px 0 0;padding-right:54px}
+.book{
+  position:relative;min-height:430px;padding:18px 16px 20px 30px;border-radius:10px 20px 20px 10px;color:#fff;
+  background:linear-gradient(135deg,var(--book),var(--book-dark));
+  border:1.5px solid var(--ink);box-shadow:10px 10px 0 color-mix(in srgb,var(--book-dark) 35%,transparent),var(--shadow)
+}
+.book::before{content:"";position:absolute;left:0;top:0;bottom:0;width:20px;border-radius:9px 0 0 9px;background:rgba(0,0,0,.2);border-right:2px solid rgba(255,255,255,.25)}
+.book::after{ /* elastic band */
+  content:"";position:absolute;right:26px;top:-2px;bottom:-2px;width:9px;background:var(--red);
+  border-left:1.5px solid rgba(0,0,0,.25);border-right:1.5px solid rgba(0,0,0,.25);opacity:.9;pointer-events:none
+}
+.book-title{
+  position:relative;z-index:1;padding:12px 15px;margin-right:22px;background:var(--surface);color:var(--text);
+  border-radius:8px;border:1.5px solid var(--ink);box-shadow:3px 3px 0 rgba(0,0,0,.25);transform:rotate(-.6deg)
+}
+.book-title small{color:var(--red);font:800 .6rem var(--mono);letter-spacing:.13em;text-transform:uppercase}
+.book-title h3{font-size:1.28rem;margin:6px 0 0}
+.book-tabs{position:absolute;left:100%;top:30px;display:flex;flex-direction:column;gap:7px;width:56px;z-index:2}
+.book-tab{
+  border:1.5px solid var(--ink);border-left:0;cursor:pointer;min-height:68px;padding:10px 5px;border-radius:0 12px 12px 0;
+  background:var(--tab);color:var(--tab-text);font:800 .58rem var(--mono);letter-spacing:.04em;line-height:1.12;
+  writing-mode:vertical-rl;transform:none;box-shadow:3px 3px 0 rgba(0,0,0,.1);transition:.18s
+}
+.book-tab:hover{transform:translateX(3px)}
+.book-tab.active{background:var(--gold);color:#fff;transform:translateX(6px)}
+.book-page{
+  position:relative;z-index:1;margin:18px 22px 0 0;min-height:275px;padding:20px 20px 20px 34px;background:var(--surface);color:var(--text);
+  border-radius:10px;border:1.5px solid var(--ink)
+}
+.book-page::before{content:"";position:absolute;left:18px;top:0;bottom:0;border-left:2px solid color-mix(in srgb,var(--red) 55%,transparent)}
+.book-page .page-kicker{color:var(--red);font:800 .62rem var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.book-page h4{font-family:var(--serif);font-size:1.28rem;line-height:1.25;letter-spacing:-.01em;margin:10px 0 12px}
+.book-page p{color:var(--muted);font-size:.92rem}
+.book-page ul{margin:12px 0 0;padding-left:20px;color:var(--muted)}
+.book-page li{margin:5px 0}.book-page li::marker{color:var(--gold)}
+.book-hint{position:relative;z-index:1;text-align:center;color:rgba(255,255,255,.8);font:700 .68rem var(--mono);letter-spacing:.04em;margin:14px 22px 0 0}
+@media(max-width:520px){
+  .book-wrap{padding-right:50px}.book{min-height:450px;padding-left:28px}
+  .book-tabs{width:50px;top:24px}.book-tab{min-height:62px;font-size:.54rem}
+  .book-page{padding:17px 15px 17px 30px;margin-right:16px}.book-title{margin-right:16px}.book-hint{margin-right:16px}
+  .book::after{right:18px}
+}
+
+/* ---------- Notation / callouts / lists ---------- */
+.split{margin-top:14px;border:1.5px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--surface)}
+.split-row{display:grid;grid-template-columns:70px 1fr;border-bottom:1.5px dashed var(--line);align-items:center}
+.split-row:last-child{border-bottom:0}
+.split-row>div{padding:12px 14px}
+.split-row>div:first-child{text-align:center;background:var(--surface-2);font:800 1.15rem var(--mono);color:var(--red);border-right:1.5px solid var(--ink)}
+.callout{
+  margin-top:22px;padding:18px 20px;background:var(--surface-2);border:1.5px solid var(--secondary);
+  border-left:8px solid var(--secondary);border-radius:6px 16px 16px 6px
+}
+.callout strong{display:block;margin-bottom:4px;color:var(--secondary);font:800 .72rem var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.checklist{list-style:none;padding:0;margin:10px 0 0}
+.checklist li{position:relative;padding:10px 0 10px 32px;border-bottom:1.5px dashed var(--line)}
+.checklist li:last-child{border-bottom:0}
+.checklist li::before{
+  content:"";position:absolute;left:0;top:13px;width:17px;height:17px;border:2px solid var(--secondary);border-radius:5px;background:var(--surface)
+}
+
+/* ---------- Mind map ---------- */
+.mindmap-card{
+  max-width:900px;margin:28px auto 0;text-align:center;border:1.5px solid var(--ink);border-radius:26px;padding:26px 12px 30px;
+  box-shadow:6px 6px 0 var(--line-strong);overflow:hidden;
+  background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--accent) 10%,transparent),transparent 62%),var(--surface)
+}
+.map-title{font:800 .68rem var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--red)}
+.map-subtitle{max-width:610px;margin:7px auto 0;color:var(--muted);font-size:.92rem}
+.map-canvas{position:relative;width:min(100%,760px);height:500px;margin:24px auto 0}
+.map-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.map-line{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;opacity:.55}
+.map-line.dashed{stroke-dasharray:7 8}
+.map-node{
+  position:absolute;z-index:2;display:flex;flex-direction:column;justify-content:center;width:132px;min-height:76px;padding:10px 12px;
+  border:1.5px solid var(--ink);border-top:6px solid var(--accent);background:var(--surface);color:var(--text);border-radius:14px;
+  box-shadow:3px 3px 0 var(--line-strong);font-size:.78rem;font-weight:800;text-align:left
+}
+.map-node.a{border-top-color:var(--accent)}.map-node.b{border-top-color:var(--red)}
+.map-node.c{border-top-color:var(--secondary)}.map-node.d{border-top-color:var(--gold)}.map-node.e{border-top-color:var(--book-dark)}
+.map-node small{display:block;color:var(--muted);font-size:.65rem;font-weight:600;margin-top:3px}
+.map-node.center{
+  width:172px;height:116px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;border:1.5px solid var(--ink);
+  background:var(--accent);color:var(--surface);text-align:center;align-items:center;
+  box-shadow:0 0 0 10px color-mix(in srgb,var(--accent) 16%,transparent),0 0 0 22px color-mix(in srgb,var(--accent) 7%,transparent)
+}
+.map-node.center small{color:color-mix(in srgb,var(--surface) 82%,transparent)}
+.map-node.a{left:3%;top:9%}.map-node.b{right:3%;top:9%}.map-node.c{left:1%;bottom:8%}.map-node.d{right:1%;bottom:8%}
+.map-node.e{left:50%;bottom:0;transform:translateX(-50%)}
+.map-caption{max-width:620px;margin:0 auto;color:var(--muted);font-size:.8rem;padding:0 8px}
+@media(max-width:600px){
+  .map-canvas{height:525px;max-width:520px}.map-node{width:114px;min-height:68px;font-size:.7rem}
+  .map-node.center{width:146px;height:96px}
+  .map-node.a{left:0}.map-node.b{right:0}.map-node.c{left:-2%}.map-node.d{right:-2%}.map-node.e{bottom:1%}
+}
+
+/* ---------- Learning flow ---------- */
+.workflow{display:flex;flex-direction:column}
+.workflow-step{display:flex;gap:16px;position:relative;padding-bottom:28px}
+.workflow-step:last-child{padding-bottom:0}
+.workflow-step:not(:last-child)::after{content:"";position:absolute;left:17px;top:38px;bottom:2px;border-left:2px dashed var(--line-strong)}
+.dot{
+  position:relative;z-index:2;flex:0 0 36px;width:36px;height:36px;display:grid;place-items:center;border-radius:50%;
+  background:var(--red);color:#fff;font:800 .8rem var(--mono);border:1.5px solid var(--ink);box-shadow:2px 2px 0 var(--ink)
+}
+.workflow-step h3{margin:0 0 6px}.workflow-step p{margin:0;color:var(--muted);font-size:.92rem}
+
+/* ---------- Quick reference ---------- */
+.quick{display:grid;gap:10px}
+.quick-item{
+  display:flex;gap:14px;align-items:flex-start;padding:14px 16px;background:var(--surface);
+  border:1.5px solid var(--ink);border-left:7px solid var(--accent);border-radius:6px 14px 14px 6px;transition:.15s
+}
+.quick-item:hover{transform:translateX(4px);box-shadow:-4px 4px 0 var(--line-strong)}
+.quick-item:nth-child(even){border-left-color:var(--gold)}
+.quick-item b{min-width:104px;font:800 .8rem var(--mono);color:var(--accent-dark);padding-top:2px}
+.quick-item span{color:var(--muted);font-size:.9rem}
+
+/* ---------- Diagram (terminal) ---------- */
+.diagram{
+  margin-top:22px;padding:16px 20px 20px;background:var(--book-dark);color:#e8f0f2;border:1.5px solid var(--ink);border-radius:14px;
+  font:.8rem/1.8 var(--mono);white-space:pre-wrap;overflow-x:auto;box-shadow:5px 5px 0 var(--line-strong)
+}
+.diagram::before{content:"● ● ●";display:block;color:var(--gold);letter-spacing:.2em;font-size:.7rem;margin-bottom:10px;opacity:.9}
+
+/* ---------- Footer ---------- */
+footer{margin-top:100px;padding-top:26px;border-top:1.5px dashed var(--line-strong);color:var(--muted);font:700 .74rem var(--mono);letter-spacing:.04em;text-align:center}
+
+/* ---------- Larger screens ---------- */
+@media(min-width:700px){
+  body{font-size:17px}
+  .page{padding-left:28px;padding-right:28px}
+  .nav-wrap{margin-left:-28px;margin-right:-28px;padding-left:28px;padding-right:28px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .two-col>.card{margin-bottom:0}
+  section{margin-top:116px}
+  .workflow{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .workflow-step{display:block;padding:20px;background:var(--surface);border:1.5px solid var(--ink);border-radius:18px;box-shadow:4px 4px 0 var(--line-strong)}
+  .workflow-step:not(:last-child)::after{display:none}
+  .dot{margin-bottom:16px}
+  .quick{grid-template-columns:1fr 1fr}
+}
+@media(min-width:1000px){.page{padding-left:0;padding-right:0}.nav-wrap{margin-left:0;margin-right:0;padding-left:0;padding-right:0}}
+
+@media print{
+  body{background:#fff;color:#111}
+  .controls,.nav-wrap{display:none}.page{max-width:none;padding:0}
+  section{margin-top:45px;break-inside:avoid}.book-tabs{display:none}
+  .book,.mindmap-card,.card{box-shadow:none}
+}
+
+/* ===== SPACE FX ===== */
+body{overflow-x:clip;--star:var(--accent);--so:.6}
+body.dark{--star:#fff;--so:1}
+.page{position:relative;z-index:1}
+.starfield{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;opacity:var(--so)}
+.st{position:absolute;left:0;top:0;border-radius:50%;background:var(--star);--o:.8;animation:twinkle 5s ease-in-out infinite;will-change:transform}
+.st:nth-child(2){--o:.9}.st:nth-child(3){--o:1;filter:drop-shadow(0 0 3px var(--star))}
+@keyframes twinkle{0%,100%{opacity:calc(var(--o)*.25)}50%{opacity:var(--o)}}
+.shoot{position:absolute;width:130px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--star));transform:rotate(135deg);opacity:0;animation:shoot 1.1s ease-out forwards;filter:drop-shadow(0 0 4px var(--star))}
+@keyframes shoot{0%{opacity:0;translate:0 0}12%{opacity:1}100%{opacity:0;translate:-380px 380px}}
+.progress{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);height:3px;z-index:60;pointer-events:none;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--accent),var(--gold),var(--red));box-shadow:0 0 10px var(--gold)}
+.warp{position:fixed;z-index:100;width:200px;height:200px;margin:-100px 0 0 -100px;border-radius:50%;border:3px solid var(--accent);pointer-events:none;animation:warp .8s ease-out forwards}
+@keyframes warp{from{transform:scale(.05);opacity:1}to{transform:scale(16);opacity:0}}
+
+/* hero */
+.orbit{position:absolute;z-index:1;pointer-events:none;width:310px;height:310px;right:-110px;top:-34px;border:1.5px dashed color-mix(in srgb,var(--accent) 50%,transparent);border-radius:50%;animation:spin 22s linear infinite}
+.orbit i{position:absolute;left:50%;top:-9px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,var(--red));box-shadow:0 0 14px var(--red)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(min-width:700px){.orbit{width:400px;height:400px;right:-30px;top:-10px}}
+.eyebrow::after{content:"_";color:var(--red);font-weight:800;margin-left:-4px;animation:blink 1s steps(2,start) infinite}
+@keyframes blink{50%{opacity:0}}
+.astronaut::after{content:"";position:absolute;left:50%;bottom:-2px;width:48%;height:14px;margin-left:-24%;border-radius:50%;z-index:-1;background:radial-gradient(var(--gold),transparent 70%);filter:blur(5px);animation:thrust 5s ease-in-out infinite}
+@keyframes thrust{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(.6);opacity:.35}}
+
+/* interactions */
+.nav a.on{background:var(--accent);color:var(--surface);border-color:var(--ink);box-shadow:0 0 12px color-mix(in srgb,var(--accent) 55%,transparent)}
+.card,.map-node,.workflow-step{transition:translate .2s,box-shadow .2s,border-color .2s}
+.card:hover{translate:-2px -2px;box-shadow:7px 7px 0 var(--gold);border-color:var(--accent)}
+.workflow-step:hover{translate:-2px -2px}
+.js .rv{opacity:0;translate:0 28px;transition:opacity .7s ease,translate .7s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;translate:0 0}
+
+/* mind map */
+.map-line{stroke-dasharray:7 8;animation:flow 1.6s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-30}}
+.map-node.center{animation:pulse 3.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 10px color-mix(in srgb,var(--accent) 16%,transparent),0 0 0 22px color-mix(in srgb,var(--accent) 7%,transparent)}50%{box-shadow:0 0 0 16px color-mix(in srgb,var(--accent) 24%,transparent),0 0 0 32px color-mix(in srgb,var(--accent) 9%,transparent)}}
+.map-node:not(.center){animation:bob 5s ease-in-out infinite}
+.map-node.b{animation-delay:-1.2s}.map-node.c{animation-delay:-2.4s}.map-node.d{animation-delay:-3.2s}.map-node.e{animation-delay:-4s}
+@keyframes bob{50%{translate:0 -6px}}
+
+/* workflow + terminal */
+.dot{animation:ping 2.6s ease-out infinite}
+.workflow-step:nth-child(2) .dot{animation-delay:.4s}.workflow-step:nth-child(3) .dot{animation-delay:.8s}
+.workflow-step:nth-child(4) .dot{animation-delay:1.2s}.workflow-step:nth-child(5) .dot{animation-delay:1.6s}.workflow-step:nth-child(6) .dot{animation-delay:2s}
+@keyframes ping{0%{box-shadow:2px 2px 0 var(--ink),0 0 0 0 color-mix(in srgb,var(--red) 60%,transparent)}70%,100%{box-shadow:2px 2px 0 var(--ink),0 0 0 14px transparent}}
+.diagram{background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px)}
+.diagram::after{content:"█";color:var(--gold);animation:blink 1s steps(2,start) infinite}
+.book-tab.active{box-shadow:3px 3px 0 rgba(0,0,0,.1),0 0 14px var(--gold)}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .rv{opacity:1;translate:none}.st{opacity:.6}
+}
+@media print{.starfield,.progress,.orbit,.warp{display:none}.js .rv{opacity:1;translate:none}}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<header>
+  <div class="hero-copy">
+    <div class="eyebrow">My Personal Learning System</div>
+    <h1>Learn. Work. Connect. Understand.</h1>
+    <p class="intro">
+      A simple system for learning actively, practicing what I learn, and building a
+      mind map that shows how topics, subjects, and ideas connect.
+    </p>
+    <div class="motto">
+      <strong>The goal is understanding — not perfect notes.</strong>
+      The notebooks capture the journey. The mind map shows the bigger picture.
+    </div>
+  </div>
+
+  <!-- Self-contained retro astronaut: no external image dependency. -->
+  <div class="astronaut" aria-label="Retro space engineer">
+    <svg viewBox="0 0 200 260" role="img">
+  <defs>
+    <linearGradient id="visor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" style="stop-color:#f2cf8a"/><stop offset=".5" style="stop-color:var(--character-glass)"/><stop offset="1" style="stop-color:#1f313b"/>
+    </linearGradient>
+  </defs>
+  <path d="M16 74l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="var(--character-gold)"/>
+  <path d="M178 196l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="var(--character-gold)"/>
+  <circle cx="22" cy="170" r="2.5" fill="var(--character-glass)"/>
+  <g transform="translate(0,10)">
+    <!-- antenna -->
+    <path d="M130 14L142 0" stroke="var(--character-dark)" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="142" cy="0" r="4.5" fill="var(--character-red)" stroke="var(--character-dark)" stroke-width="2"/>
+    <!-- tanks -->
+    <rect x="42" y="100" width="24" height="76" rx="11" fill="var(--character-dark)"/>
+    <rect x="134" y="100" width="24" height="76" rx="11" fill="var(--character-dark)"/>
+    <rect x="42" y="126" width="24" height="7" fill="var(--character-gold)"/>
+    <rect x="134" y="126" width="24" height="7" fill="var(--character-gold)"/>
+    <!-- legs + boots -->
+    <rect x="68" y="168" width="28" height="52" rx="12" fill="var(--character-suit)" stroke="var(--character-dark)" stroke-width="4"/>
+    <rect x="104" y="168" width="28" height="52" rx="12" fill="var(--character-suit)" stroke="var(--character-dark)" stroke-width="4"/>
+    <rect x="61" y="208" width="40" height="26" rx="11" fill="var(--character-dark)"/>
+    <rect x="99" y="208" width="40" height="26" rx="11" fill="var(--character-dark)"/>
+    <rect x="65" y="220" width="32" height="4" fill="var(--character-red)"/>
+    <rect x="103" y="220" width="32" height="4" fill="var(--character-red)"/>
+    <!-- torso -->
+    <rect x="56" y="94" width="88" height="84" rx="28" fill="var(--character-suit)" stroke="var(--character-dark)" stroke-width="4"/>
+    <rect x="62" y="158" width="76" height="9" rx="3" fill="var(--character-gold)" stroke="var(--character-dark)" stroke-width="2.5"/>
+    <rect x="94" y="156" width="12" height="13" rx="3" fill="var(--character-dark)"/>
+    <!-- chest control panel -->
+    <rect x="75" y="116" width="50" height="32" rx="7" fill="var(--character-dark)"/>
+    <circle cx="87" cy="127" r="4" fill="var(--character-red)"/>
+    <circle cx="100" cy="127" r="4" fill="var(--character-gold)"/>
+    <circle cx="113" cy="127" r="4" fill="#83a8b8"/>
+    <rect x="84" y="136" width="32" height="5" rx="2.5" fill="var(--character-gold)" opacity=".85"/>
+    <!-- mission patch -->
+    <circle cx="130" cy="110" r="8.5" fill="var(--character-red)" stroke="var(--character-suit)" stroke-width="2"/>
+    <text x="130" y="113.5" text-anchor="middle" font-size="9" font-weight="900" fill="#fff">M</text>
+    <!-- wrench -->
+    <g transform="rotate(25 159 166)">
+      <rect x="156" y="124" width="6" height="46" rx="3" fill="#c9ced1" stroke="var(--character-dark)" stroke-width="2"/>
+      <circle cx="159" cy="120" r="9" fill="#c9ced1" stroke="var(--character-dark)" stroke-width="2"/>
+      <rect x="155.5" y="108" width="7" height="10" fill="var(--bg)"/>
+    </g>
+    <!-- arms + gloves -->
+    <rect x="34" y="106" width="24" height="58" rx="12" fill="var(--character-suit)" stroke="var(--character-dark)" stroke-width="4" transform="rotate(10 46 135)"/>
+    <rect x="142" y="106" width="24" height="58" rx="12" fill="var(--character-suit)" stroke="var(--character-dark)" stroke-width="4" transform="rotate(-10 154 135)"/>
+    <circle cx="41" cy="167" r="10.5" fill="var(--character-dark)"/>
+    <circle cx="159" cy="167" r="10.5" fill="var(--character-dark)"/>
+    <!-- neck ring -->
+    <rect x="73" y="90" width="54" height="15" rx="7.5" fill="var(--character-gold)" stroke="var(--character-dark)" stroke-width="3"/>
+    <!-- helmet -->
+    <rect x="45" y="42" width="13" height="28" rx="6" fill="var(--character-dark)"/>
+    <rect x="142" y="42" width="13" height="28" rx="6" fill="var(--character-dark)"/>
+    <circle cx="100" cy="54" r="46" fill="var(--character-suit)" stroke="var(--character-dark)" stroke-width="4"/>
+    <path d="M64 24a44 44 0 0 1 28-12" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".75"/>
+    <rect x="58" y="26" width="84" height="58" rx="29" fill="var(--character-dark)"/>
+    <rect x="64" y="32" width="72" height="46" rx="23" fill="url(#visor)"/>
+    <ellipse cx="83" cy="43" rx="13" ry="4.5" fill="#fff" opacity=".5" transform="rotate(-22 83 43)"/>
+    <circle cx="124" cy="68" r="2.5" fill="#fff" opacity=".5"/>
+  </g>
+</svg>
+
+    <div class="astronaut-label">Retro Space Engineer</div>
+  </div>
+</header>
+
+<div class="controls">
+  <span class="season-name" id="seasonName">Season</span>
+  <button class="control" id="seasonToggle" type="button">Change Season</button>
+  <button class="control" id="themeToggle" type="button">☾ Dark</button>
+</div>
+
+<div class="nav-wrap">
+  <nav class="nav" aria-label="Page sections">
+    <a href="#overview">Overview</a>
+    <a href="#school">School</a>
+    <a href="#cyber">Cybersecurity</a>
+    <a href="#mindmap">Mind Map</a>
+    <a href="#archive">Archive</a>
+    <a href="#workflow">Workflow</a>
+    <a href="#rules">Rules</a>
+  </nav>
+</div>
+
+<section id="overview">
+  <div class="section-label">01 / Overview</div>
+  <h2>Everything has a job.</h2>
+
+  <div class="card">
+    <div class="system-item">
+      <div class="number">01</div>
+      <div><strong>Active notebook</strong><span>Where I learn, write, solve problems, practice, and make mistakes.</span></div>
+    </div>
+    <div class="system-item">
+      <div class="number">02</div>
+      <div><strong>Reference</strong><span>Where the small amount of information I repeatedly need stays easy to find.</span></div>
+    </div>
+    <div class="system-item">
+      <div class="number">03</div>
+      <div><strong>Archive</strong><span>Where completed learning lives after I finish a unit or major section.</span></div>
+    </div>
+    <div class="system-item">
+      <div class="number">04</div>
+      <div><strong>Mind map</strong><span>Where I connect ideas and build a bigger-picture understanding across topics and subjects.</span></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>When I am unsure where something belongs:</strong>
+    Put it where the work is happening first. I can refine, connect, and archive it later.
+  </div>
+</section>
+
+<section id="school">
+  <div class="section-label">02 / School</div>
+  <h2>My school notebook system.</h2>
+  <p class="muted">
+    The tabs below turn the physical notebook system into a small interactive book.
+    Tap a tab to see exactly what belongs in that section.
+  </p>
+
+  <div class="book-wrap">
+    <div class="book" aria-label="Interactive school notebook">
+      <div class="book-title">
+        <small>Campus Working Book</small>
+        <h3>B5 · School / Math</h3>
+      </div>
+
+      <div class="book-tabs">
+        <button class="book-tab active" type="button" data-book="school" data-page="current">CURRENT</button>
+        <button class="book-tab" type="button" data-book="school" data-page="review">REVIEW</button>
+        <button class="book-tab" type="button" data-book="school" data-page="scratch">SCRATCH</button>
+        <button class="book-tab" type="button" data-book="school" data-page="a7">A7 REF</button>
+      </div>
+
+      <div class="book-page" id="schoolPage" aria-live="polite"></div>
+      <div class="book-hint">Tap a tab to turn to that section.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:35px">
+    <div class="card-label">Simple notation</div>
+    <h3>Mark my thinking while it happens.</h3>
+    <div class="split">
+      <div class="split-row"><div>?</div><div>Question / I do not understand yet</div></div>
+      <div class="split-row"><div>!</div><div>My own understanding or insight</div></div>
+      <div class="split-row"><div>★</div><div>Important / remember</div></div>
+      <div class="split-row"><div>✗</div><div>Mistake</div></div>
+      <div class="split-row"><div>↳</div><div>Connection</div></div>
+      <div class="split-row"><div>R</div><div>Remember / repeatedly forget</div></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Question rule</strong>
+    If my brain asks it, write it down — even if the question feels basic.
+  </div>
+</section>
+
+<section id="cyber">
+  <div class="section-label">03 / Independent Learning</div>
+  <h2>My cybersecurity notebook system.</h2>
+  <p class="muted">
+    The same physical idea applies to cybersecurity: every section has one job,
+    and the active notebook stays small enough to carry and revisit.
+  </p>
+
+  <div class="book-wrap">
+    <div class="book" aria-label="Interactive cybersecurity notebook">
+      <div class="book-title">
+        <small>Active Cybersecurity Book</small>
+        <h3>100 Sheets · HTB / Cyber</h3>
+      </div>
+
+      <div class="book-tabs">
+        <button class="book-tab active" type="button" data-book="cyber" data-page="concepts">50 CONCEPTS</button>
+        <button class="book-tab" type="button" data-book="cyber" data-page="labs">40 LABS</button>
+        <button class="book-tab" type="button" data-book="cyber" data-page="cheats">10 REFS</button>
+        <button class="book-tab" type="button" data-book="cyber" data-page="markdown">HTB MD</button>
+      </div>
+
+      <div class="book-page" id="cyberPage" aria-live="polite"></div>
+      <div class="book-hint">Tap a tab to turn to that section.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Cybersecurity rule</strong>
+    Reading introduces the idea. The lab makes it usable. The notes capture what I learned from doing it.
+  </div>
+</section>
+
+<section id="mindmap">
+  <div class="section-label">04 / Understanding</div>
+  <h2>Build the mind map.</h2>
+  <p class="muted" style="max-width:680px;margin-left:auto;margin-right:auto">
+    The goal is not “using Obsidian.” The goal is seeing how everything fits together.
+    Obsidian is simply the tool I use to build and maintain that map.
+  </p>
+
+  <div class="mindmap-card">
+    <div class="map-title">My Bigger Picture</div>
+    <div class="map-subtitle">One idea becomes more useful when I can see what it connects to.</div>
+
+    <div class="map-canvas" role="img" aria-label="Mind map showing connections between school, cybersecurity, programming, engineering, projects, and overall understanding">
+      <svg class="map-svg" viewBox="0 0 760 500" preserveAspectRatio="none" aria-hidden="true">
+        <path class="map-line" d="M380 250 C300 185 230 125 112 90"/>
+        <path class="map-line" d="M380 250 C460 185 530 125 648 90"/>
+        <path class="map-line" d="M380 250 C275 300 190 360 105 408"/>
+        <path class="map-line" d="M380 250 C485 300 570 360 655 408"/>
+        <path class="map-line dashed" d="M380 250 C380 330 380 405 380 462"/>
+      </svg>
+
+      <div class="map-node center">
+        <b>MY<br>UNDERSTANDING</b>
+        <small>The bigger picture</small>
+      </div>
+
+      <div class="map-node a">School / Math<small>Foundations</small></div>
+      <div class="map-node b">Cybersecurity<small>Security concepts</small></div>
+      <div class="map-node c">Programming<small>Code + systems</small></div>
+      <div class="map-node d">Engineering<small>Physical systems</small></div>
+      <div class="map-node e">Projects<small>Where ideas meet</small></div>
+    </div>
+
+    <div class="map-caption">
+      The map grows as understanding grows. Topics can connect across classes, certifications,
+      books, labs, projects, and subjects.
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:28px">
+    <div class="card-label">Questions the map should answer</div>
+    <h3>See the bigger picture.</h3>
+    <ul class="checklist">
+      <li>What concepts belong together?</li>
+      <li>What do I need to understand before I can understand this?</li>
+      <li>What does this topic connect to?</li>
+      <li>Where does this idea show up somewhere else?</li>
+      <li>How does this subject connect to another subject?</li>
+      <li>What bigger system do these individual pieces belong to?</li>
+    </ul>
+  </div>
+
+  <div class="diagram">LEARN
+  ↓
+PRACTICE
+  ↓
+UNDERSTAND
+  ↓
+MAP
+  ↓
+CONNECT
+  ↓
+SEE THE BIGGER PICTURE
+
+Physical notebooks = what happened while learning.
+Mind map = how everything fits together.
+Obsidian = the tool I use to build the map.</div>
+</section>
+
+<section id="archive">
+  <div class="section-label">05 / Archive</div>
+  <h2>Archive as I progress.</h2>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-label">School</div>
+      <h3>B5 → Home Archive</h3>
+      <p>Finish a unit or exam → review → remove completed pages → store them by unit in the larger B5 archive.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Cybersecurity</div>
+      <h3>Active → Permanent Binder</h3>
+      <p>Finish a major HTB section or learning path → archive those pages → keep the active notebook small.</p>
+    </div>
+  </div>
+
+  <div class="diagram">ACTIVE NOTEBOOK
+      ↓
+FINISH UNIT / SECTION
+      ↓
+REVIEW
+      ↓
+CONNECT IMPORTANT IDEAS
+      ↓
+ARCHIVE
+      ↓
+PERMANENT LIBRARY
+      ↓
+FUTURE REVIEW</div>
+</section>
+
+<section id="workflow">
+  <div class="section-label">06 / The System</div>
+  <h2>The whole learning loop.</h2>
+
+  <div class="workflow">
+    <div class="workflow-step"><div class="dot">1</div><h3>Learn</h3><p>Class, textbook, course, HTB, lab, or another learning source.</p></div>
+    <div class="workflow-step"><div class="dot">2</div><h3>Take notes</h3><p>Use the active notebook. Write what matters in my own words.</p></div>
+    <div class="workflow-step"><div class="dot">3</div><h3>Practice</h3><p>Homework, problems, commands, labs, investigation, or projects.</p></div>
+    <div class="workflow-step"><div class="dot">4</div><h3>Understand</h3><p>Explain it to myself and identify what I still do not understand.</p></div>
+    <div class="workflow-step"><div class="dot">5</div><h3>Map + connect</h3><p>Place important ideas into the bigger picture and connect them across subjects.</p></div>
+    <div class="workflow-step"><div class="dot">6</div><h3>Archive + revisit</h3><p>Preserve completed work and return to the map when I need the bigger picture again.</p></div>
+  </div>
+</section>
+
+<section id="rules">
+  <div class="section-label">07 / Personal Rules</div>
+  <h2>When I forget how I want to learn.</h2>
+
+  <div class="card">
+    <ul class="checklist">
+      <li>Do not build a beautiful system that prevents me from learning.</li>
+      <li>Do not copy information just to make the notebook look complete.</li>
+      <li>Write in my own words whenever possible.</li>
+      <li>Use mistakes and questions as information about what I need to learn.</li>
+      <li>Practice matters — especially for cybersecurity.</li>
+      <li>Archive as I go so the active notebook stays small.</li>
+      <li>The mind map is for understanding and connections, not duplication.</li>
+      <li>Obsidian is a tool for the map, not the purpose of the map.</li>
+      <li>The system can change if I discover a better way to learn.</li>
+    </ul>
+  </div>
+
+  <div class="card" style="background:var(--book-dark);color:#fff;border-color:var(--book-dark)">
+    <strong style="color:#fff">My simplest reminder</strong>
+    Learn it → Work it → Understand it → Map it → Connect it → Archive it → Revisit it.
+  </div>
+</section>
+
+<section>
+  <div class="section-label">08 / Quick Reference</div>
+  <h2>Where does this go?</h2>
+
+  <div class="quick">
+    <div class="quick-item"><b>Class notes</b><span>B5 working notebook.</span></div>
+    <div class="quick-item"><b>Math formula</b><span>A7 Formula + Memory Book if it is worth keeping as reference.</span></div>
+    <div class="quick-item"><b>Cyber concept</b><span>50-page Notes / Concepts section.</span></div>
+    <div class="quick-item"><b>Cyber lab</b><span>40-page Labs / Hands-On section.</span></div>
+    <div class="quick-item"><b>Command / port</b><span>10-page Cheat Sheet / References section if it is high-value.</span></div>
+    <div class="quick-item"><b>Big connection</b><span>Mind map — built in Obsidian.</span></div>
+    <div class="quick-item"><b>Finished section</b><span>Archive it.</span></div>
+    <div class="quick-item"><b>Temporary note</b><span>HTB Markdown when necessary, then transfer anything important.</span></div>
+  </div>
+</section>
+
+<footer>
+  My Learning System · Built to make learning easier, not make note-taking harder.
+</footer>
+
+</div>
+
+<script>
+/* =========================================================
+   INTERACTION
+   ========================================================= */
+
+const body = document.body;
+const seasons = ["winter","spring","summer","fall"];
+
+const seasonNames = {
+  winter:"Winter",
+  spring:"Spring",
+  summer:"Summer",
+  fall:"Fall"
+};
+
+function getSeason(){
+  const month = new Date().getMonth() + 1;
+  if(month === 12 || month <= 2) return "winter";
+  if(month <= 5) return "spring";
+  if(month <= 8) return "summer";
+  return "fall";
+}
+
+let currentSeason = getSeason();
+
+function applySeason(season){
+  seasons.forEach(s => body.classList.remove(s));
+  body.classList.add(season);
+  currentSeason = season;
+  document.getElementById("seasonName").textContent = "● " + seasonNames[season];
+  try{localStorage.setItem("learning-season", season);}catch(e){}
+}
+
+let savedSeason=null;try{savedSeason=localStorage.getItem("learning-season");}catch(e){}
+applySeason(savedSeason && seasons.includes(savedSeason) ? savedSeason : currentSeason);
+
+document.getElementById("seasonToggle").addEventListener("click",()=>{
+  const next = (seasons.indexOf(currentSeason) + 1) % seasons.length;
+  applySeason(seasons[next]);
+});
+
+/* ---------- Light / dark ---------- */
+let savedTheme=null;try{savedTheme=localStorage.getItem("learning-theme");}catch(e){}
+if(savedTheme === "dark") body.classList.add("dark");
+
+function updateThemeButton(){
+  document.getElementById("themeToggle").textContent =
+    body.classList.contains("dark") ? "☀ Light" : "☾ Dark";
+}
+updateThemeButton();
+
+document.getElementById("themeToggle").addEventListener("click",()=>{
+  body.classList.toggle("dark");
+  try{localStorage.setItem("learning-theme", body.classList.contains("dark") ? "dark" : "light");}catch(e){}
+  updateThemeButton();
+});
+
+/* ---------- Book data ---------- */
+const schoolPages = {
+  current:{
+    kicker:"B5 · Current",
+    title:"Lecture + homework together",
+    text:"Keep the learning sequence intact. This is the notebook I actually carry and use every day.",
+    list:["Lecture notes","Related homework","Questions marked ?","Important ideas marked ★","My own understanding marked !"]
+  },
+  review:{
+    kicker:"B5 · Review",
+    title:"What do I understand now?",
+    text:"After working with the material, capture corrections, difficult ideas, connections, and your own explanations. Do not rewrite the entire lecture.",
+    list:["Mental models","Corrections","Difficult ideas","Connections","Questions that need another look"]
+  },
+  scratch:{
+    kicker:"B5 · Scratch",
+    title:"Messy work is allowed",
+    text:"Use this space for calculations, graphs, factoring, alternate approaches, and problem-solving. It is okay to destroy paper here.",
+    list:["Calculations","Graphs","Factoring","Alternate approaches","Problem-solving"]
+  },
+  a7:{
+    kicker:"A7 · Formula + Memory",
+    title:"One concept per sheet",
+    text:"Use the front for quick reference. Use the back to make the idea understandable.",
+    list:["Front: formula / reference","Back: what + when + how","Memory cue","Origin when useful","Questions I still have"]
+  }
+};
+
+const cyberPages = {
+  concepts:{
+    kicker:"50 Pages · Notes / Concepts",
+    title:"Understand the material",
+    text:"Write concepts from the current HTB module in my own words. Do not simply copy the course.",
+    list:["What the concept is","What it actually does","What I learned","Questions I still have"]
+  },
+  labs:{
+    kicker:"40 Pages · Labs / Hands-On",
+    title:"Make the knowledge usable",
+    text:"Record what I actually did during hands-on work and what I learned from the investigation.",
+    list:["Commands","Investigation steps","Findings","Process","What I learned"]
+  },
+  cheats:{
+    kicker:"10 Pages · Cheat Sheets / References",
+    title:"Keep only high-value references",
+    text:"This section is for things I repeatedly need to look up or want available for quick review.",
+    list:["Important commands","Ports","Syntax","Tools","Quick-reference material"]
+  },
+  markdown:{
+    kicker:"HTB Markdown · Temporary Capture",
+    title:"A scratchpad, not another system",
+    text:"Use HTB Markdown when I am away from the physical notebook, especially on the iPad. Transfer anything important later.",
+    list:["Quick capture","Temporary notes","Away from notebook","Transfer important material later"]
+  }
+};
+
+function renderPage(pageElement,data){
+  pageElement.innerHTML =
+    '<div class="page-kicker">'+data.kicker+'</div>'+
+    '<h4>'+data.title+'</h4>'+
+    '<p>'+data.text+'</p>'+
+    '<ul>'+data.list.map(item=>'<li>'+item+'</li>').join('')+'</ul>';
+}
+
+renderPage(document.getElementById("schoolPage"),schoolPages.current);
+renderPage(document.getElementById("cyberPage"),cyberPages.concepts);
+
+document.querySelectorAll(".book-tab").forEach(tab=>{
+  tab.addEventListener("click",()=>{
+    const book = tab.dataset.book;
+    const key = tab.dataset.page;
+    const pages = book === "school" ? schoolPages : cyberPages;
+    const target = document.getElementById(book === "school" ? "schoolPage" : "cyberPage");
+
+    document.querySelectorAll('.book-tab[data-book="'+book+'"]').forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
+    renderPage(target,pages[key]);
+  });
+});
+</script>
+
+<script>
+/* Space FX: starfield, shooting stars, orbit, reveal, nav spy, progress, warp */
+(function(){
+  const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const de=document.documentElement;
+  const sf=document.createElement('div');sf.className='starfield';document.body.prepend(sf);
+  const H=Math.max(innerHeight,800);
+  const layers=[[70,1,.04,5],[32,2,.08,7],[10,3,.14,4]].map(([n,sz,f,d])=>{
+    const el=document.createElement('i');el.className='st';
+    el.style.cssText='width:'+sz+'px;height:'+sz+'px;animation-duration:'+d+'s;animation-delay:-'+(Math.random()*d).toFixed(2)+'s';
+    const pts=[];
+    for(let k=0;k<n;k++){const x=(Math.random()*100).toFixed(1),y=Math.round(Math.random()*H);pts.push(x+'vw '+y+'px 0 var(--star)',x+'vw '+(y+H)+'px 0 var(--star)');}
+    el.style.boxShadow=pts.join(',');sf.appendChild(el);return{el,f};
+  });
+  if(rm)return;
+  de.classList.add('js');
+  const bar=document.createElement('div');bar.className='progress';document.body.appendChild(bar);
+  let tick=false;
+  function onScroll(){
+    const y=scrollY,max=document.documentElement.scrollHeight-innerHeight;
+    layers.forEach(l=>{l.el.style.transform='translateY('+(-((y*l.f)%H))+'px)'});
+    bar.style.transform='scaleX('+(max>0?Math.min(y/max,1):0)+')';tick=false;
+  }
+  addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(onScroll)}},{passive:true});
+  onScroll();
+  function shoot(){
+    const s=document.createElement('i');s.className='shoot';
+    s.style.top=(Math.random()*40)+'vh';s.style.left=(35+Math.random()*60)+'vw';
+    s.addEventListener('animationend',()=>s.remove());sf.appendChild(s);
+  }
+  setTimeout(shoot,1500);setInterval(shoot,5500);
+  const hd=document.querySelector('header');
+  if(hd)hd.insertAdjacentHTML('afterbegin','<div class="orbit" aria-hidden="true"><i></i></div>');
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target;el.classList.add('in');io.unobserve(el);
+    setTimeout(()=>{el.classList.remove('rv','in');el.style.transitionDelay=''},1300);
+  }),{threshold:.1});
+  document.querySelectorAll('section>.section-label,section>h2,section>p,section>.card,section>.callout,section>.book-wrap,section>.mindmap-card,section>.two-col>.card,section>.diagram,.workflow-step,.quick-item').forEach((el,i)=>{
+    el.classList.add('rv');el.style.transitionDelay=((i%4)*70)+'ms';io.observe(el);
+  });
+  const links=[...document.querySelectorAll('.nav a')];
+  const spy=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));
+  }),{rootMargin:'-35% 0px -60% 0px'});
+  document.querySelectorAll('section[id]').forEach(s=>spy.observe(s));
+  ['seasonToggle','themeToggle'].forEach(id=>{
+    document.getElementById(id).addEventListener('click',e=>{
+      const w=document.createElement('div');w.className='warp';
+      w.style.left=e.clientX+'px';w.style.top=e.clientY+'px';
+      document.body.appendChild(w);setTimeout(()=>w.remove(),900);
+    });
+  });
+})();
+</script>
+</body>
+</html>
